@@ -15,4 +15,4 @@ public struct Typography {
     static let label = UIFont.systemFont(ofSize: 14, weight: .heavy)
     static let body = UIFont.systemFont(ofSize: 14, weight: .regular)
     static let tag = UIFont.systemFont(ofSize: 12, weight: .semibold)
-}S
+}
