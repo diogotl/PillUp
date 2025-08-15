@@ -10,6 +10,8 @@ import UIKit
 
 class LoginBottomSheetView: UIView {
     
+    weak var delegate: LoginBottomSheetViewDelegate?
+    
     init () {
         super.init(frame: .zero)
         setupUI()
@@ -32,8 +34,19 @@ class LoginBottomSheetView: UIView {
     let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Login"
-        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        //localizable
+        label.text = NSLocalizedString("login.title", comment: "Login Title")
+        label.font = Typography.heading
+        label.textColor = .black
+        return label
+    }()
+    
+    
+    let emailLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Email"
+        label.font = Typography.label
         label.textColor = .black
         return label
     }()
@@ -42,22 +55,31 @@ class LoginBottomSheetView: UIView {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.placeholder = "Email"
-        textField.layer.borderWidth = Spacing.tiny
+        textField.layer.borderWidth = 1
         textField.layer.borderColor = UIColor.lightGray.cgColor
-        textField.layer.cornerRadius = Spacing.tiny
+        textField.layer.cornerRadius = Spacing.small
         textField.font = Typography.input
         textField.textColor = .black
         
         return textField
     }()
     
+    let passwordLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Password"
+        label.font = Typography.label
+        label.textColor = .black
+        return label
+    }()
+    
     let passwordTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.placeholder = "Email"
-        textField.layer.borderWidth = Spacing.tiny
+        textField.layer.borderWidth = 1
         textField.layer.borderColor = UIColor.lightGray.cgColor
-        textField.layer.cornerRadius = Spacing.tiny
+        textField.layer.cornerRadius = Spacing.small
         textField.font = Typography.input
         textField.isSecureTextEntry = true
         textField.textColor = .black
@@ -68,18 +90,35 @@ class LoginBottomSheetView: UIView {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Login", for: .normal)
-        button.backgroundColor = UIColor.systemBlue
+        button.backgroundColor = Colors.primaryRedBase
         button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = Spacing.tiny
-        button.titleLabel?.font = Typography.subHeading
+        button.layer.cornerRadius = Spacing.medium
+        button.titleLabel?.font = Typography.label
+        button.addTarget(self, action: #selector(submitButtonTapped), for:.touchUpInside)
         return button
     }()
     
+    @objc
+    private func submitButtonTapped() {
+        
+        let email = emailTextField.text!
+        let password = passwordTextField.text!
+        
+        delegate?.handleLoginButtonTapped(email: email, password: password)
+    }
+        
+    
     private func setupUI(){
+        
         self.backgroundColor = .white
+        self.layer.cornerRadius = Spacing.medium
+        self.layer.masksToBounds = true
+
         self.addSubview(handleArea)
         self.addSubview(titleLabel)
+        self.addSubview(emailLabel)
         self.addSubview(emailTextField)
+        self.addSubview(passwordLabel)
         self.addSubview(passwordTextField)
         self.addSubview(submitButton)
         
@@ -98,21 +137,27 @@ class LoginBottomSheetView: UIView {
             titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Spacing.medium),
             titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -Spacing.medium),
             
-            emailTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Spacing.medium),
+            emailLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Spacing.medium),
+            emailLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Spacing.medium),
+            
+            emailTextField.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: Spacing.medium),
             emailTextField.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Spacing.medium),
             emailTextField.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -Spacing.medium),
+            emailTextField.heightAnchor.constraint(equalToConstant: 48),
             
-            emailTextField.heightAnchor.constraint(equalToConstant: 44),
+            passwordLabel.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: Spacing.medium),
+            passwordLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Spacing.medium),
             
-            passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: Spacing.small),
+            passwordTextField.topAnchor.constraint(equalTo: passwordLabel.bottomAnchor, constant: Spacing.small),
             passwordTextField.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Spacing.medium),
             passwordTextField.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -Spacing.medium),
-            passwordTextField.heightAnchor.constraint(equalToConstant: 44),
+            passwordTextField.heightAnchor.constraint(equalToConstant: 48),
             
             submitButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: Spacing.medium),
             submitButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Spacing.medium),
             submitButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -Spacing.medium),
-            submitButton.heightAnchor.constraint(equalToConstant: 44),
+            submitButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -Spacing.medium),
+            submitButton.heightAnchor.constraint(equalToConstant: 48),
                                                      
                                                     
         ])
