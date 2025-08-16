@@ -18,8 +18,23 @@ class Coordinator {
     
     func start() -> UINavigationController? {
         
-        let startViewController = SplashViewController()
+        let startViewController = SplashViewController(
+            flowDelegate: self
+        )
         self.navigationController = UINavigationController(rootViewController: startViewController)
         return navigationController
+    }
+}
+
+extension Coordinator: SplashViewFlowDelegate {
+    func openLoginBottomSheet() {
+        let loginBottomSheet = LoginBottomSheetViewController(
+            
+        )
+        loginBottomSheet.modalPresentationStyle = .overCurrentContext
+        loginBottomSheet.modalTransitionStyle = .crossDissolve
+        navigationController?.present(loginBottomSheet, animated: true) {
+            loginBottomSheet.animateShow()
+        }
     }
 }
