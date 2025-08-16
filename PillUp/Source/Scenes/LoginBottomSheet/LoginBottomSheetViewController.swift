@@ -11,6 +11,7 @@ import UIKit
 class LoginBottomSheetViewController: UIViewController {
     
     var contentView: LoginBottomSheetView;
+    let viewModel = LoginBottomSheetViewModel()
     
     init() {
         self.contentView = LoginBottomSheetView()
@@ -75,6 +76,6 @@ extension LoginBottomSheetViewController: LoginBottomSheetViewDelegate {
         email: String,
         password: String
     ) {
-        print(email, password)
+        viewModel.authenticate(email: email, password: password)
     }
 }
