@@ -11,16 +11,15 @@ import UIKit
 class Coordinator {
     
     private var navigationController: UINavigationController?
+    private let factory: Factory
     
-    public init(){
-        
+    public init(factory: Factory) {
+        self.factory = factory
     }
     
     func start() -> UINavigationController? {
         
-        let startViewController = SplashViewController(
-            flowDelegate: self
-        )
+        let startViewController = factory.makeSplashViewController(flowDelegate: self)
         self.navigationController = UINavigationController(rootViewController: startViewController)
         return navigationController
     }
@@ -28,13 +27,34 @@ class Coordinator {
 
 extension Coordinator: SplashViewFlowDelegate {
     func openLoginBottomSheet() {
-        let loginBottomSheet = LoginBottomSheetViewController(
-            
+        let loginBottomSheet = factory.makeLoginBottomSheetViewController(
+            flowDelegate: self
         )
         loginBottomSheet.modalPresentationStyle = .overCurrentContext
         loginBottomSheet.modalTransitionStyle = .crossDissolve
-        navigationController?.present(loginBottomSheet, animated: true) {
+        navigationController?.present(loginBottomSheet, animated: false) {
             loginBottomSheet.animateShow()
         }
+    }
+}
+
+extension Coordinator: LoginBottomSheetFlowDelegate {
+    func goToHomeScreen(
+    ) {
+        let homeViewController = factory.makeHomeViewController(
+            flowDelegate: self
+        )
+        navigationController?.pushViewController(homeViewController, animated: true)
+    }
+}
+
+extension Coordinator: HomeViewFlowDelegate {
+    func goToNewMedicationScreen() {
+        let newMedicationViewController = factory.makeNewMedicationViewController()
+        navigationController?.pushViewController(newMedicationViewController, animated: true)
+    }
+    
+    func returnToSplashScreen() {
+        navigationController?.popToRootViewController(animated: true)
     }
 }
