@@ -11,10 +11,18 @@ import UIKit
 class LoginBottomSheetViewController: UIViewController {
     
     var contentView: LoginBottomSheetView;
-    let viewModel = LoginBottomSheetViewModel()
+    let viewModel: LoginBottomSheetViewModel;
     
-    init() {
-        self.contentView = LoginBottomSheetView()
+    weak var flowDelegate: LoginBottomSheetFlowDelegate?
+    
+    init(
+        contentView: LoginBottomSheetView,
+        viewModel: LoginBottomSheetViewModel,
+        flowDelegate: LoginBottomSheetFlowDelegate?
+    ) {
+        self.contentView = contentView
+        self.viewModel = viewModel
+        self.flowDelegate = flowDelegate
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -22,14 +30,13 @@ class LoginBottomSheetViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.contentView = LoginBottomSheetView()
         self.contentView.delegate = self
         
         setupUI()
         setupGesture()
+        bindLoginViewModel()
     }
     
     private func setupUI() {
@@ -47,7 +54,8 @@ class LoginBottomSheetViewController: UIViewController {
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
         
-        let heightConstraint = contentView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.5).isActive = true
+        let heightConstraint = contentView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.5)
+        heightConstraint.isActive = true
     }
     
     
@@ -57,6 +65,13 @@ class LoginBottomSheetViewController: UIViewController {
     
     private func handlePanGesture() {
         //
+    }
+    
+    private func bindLoginViewModel(){
+        viewModel.successResult = { [weak self] in
+            self?.dismiss(animated: true, completion: nil)
+            self?.flowDelegate?.goToHomeScreen()
+        }
     }
     
     func animateShow(completion: (() -> Void)? = nil) {

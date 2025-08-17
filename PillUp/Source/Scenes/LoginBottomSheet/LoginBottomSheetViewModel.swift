@@ -19,8 +19,12 @@ class LoginBottomSheetViewModel {
         if isLoggedIn > 0.5 {
             // Simulate successful login
             print("Login successful for email: \(emailVM)")
+            UserDefaultsManager.saveUser(User(email: emailVM))
+            successResult?()
         } else {
             print("Login failed for email: \(emailVM)")
+            
+            
         }
         
         
