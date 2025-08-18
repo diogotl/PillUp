@@ -36,8 +36,6 @@ class HomeViewController: UIViewController {
         contentView.delegate = self
         view.addSubview(contentView)
         
-        
-        
         setupConstraints()
     }
     
@@ -103,57 +101,25 @@ extension HomeViewController: UIImagePickerControllerDelegate, UINavigationContr
     private func selectProfileImage() {
         let imagePicker = UIImagePickerController()
         
-        
         imagePicker.delegate = self
-        
-        
         imagePicker.sourceType = .photoLibrary
         
-        
         imagePicker.allowsEditing = true
-        
-        
         self.present(imagePicker, animated: true)
-        
-        
     }
-    
-    
-    
-    
     
     internal func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
-        
         if let editedImage = info[.editedImage] as? UIImage {
-            
-            
             contentView.imageView.image = editedImage
-            
-            
         } else if let originalImage = info[.originalImage] as? UIImage {
             contentView.imageView.image = originalImage
         }
         
         dismiss(animated: true)
-        
-        
     }
-    
-    
-    
-    
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        
-        
         dismiss(animated: true)
-        
-        
     }
-    
-    
 }
-
-
-

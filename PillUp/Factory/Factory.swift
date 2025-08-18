@@ -10,9 +10,11 @@ import UIKit
 class Factory: FactoryProtocol {
     func makeNewMedicationViewController() -> NewMedicationViewController {
         let contentView = NewMedicationView()
+        let viewModel = NewMedicationViewModel()
         
         let controller = NewMedicationViewController(
-            contentView: contentView
+            contentView: contentView,
+            viewModel: viewModel
         )
         return controller
     }

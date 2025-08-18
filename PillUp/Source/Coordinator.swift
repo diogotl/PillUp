@@ -26,6 +26,11 @@ class Coordinator {
 }
 
 extension Coordinator: SplashViewFlowDelegate {
+    func openHomeScreen() {
+        let homeViewController = factory.makeHomeViewController(flowDelegate: self)
+        navigationController?.pushViewController(homeViewController, animated: true)
+    }
+    
     func openLoginBottomSheet() {
         let loginBottomSheet = factory.makeLoginBottomSheetViewController(
             flowDelegate: self
