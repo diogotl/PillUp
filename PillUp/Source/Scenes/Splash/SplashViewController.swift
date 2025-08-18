@@ -16,10 +16,10 @@ class SplashViewController: UIViewController {
     init(
         contentView: SplashView,
         flowDelegate: SplashViewFlowDelegate?) {
-        self.flowDelegate = flowDelegate
-        self.contentView = contentView
-        super.init(nibName: nil, bundle: nil)
-    }
+            self.flowDelegate = flowDelegate
+            self.contentView = contentView
+            super.init(nibName: nil, bundle: nil)
+        }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -31,9 +31,17 @@ class SplashViewController: UIViewController {
         setupView()
         setupGesture()
         
-        // timer
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            self.showLoginBottomSheet()
+        
+        let isUserLoggedIn = UserDefaultsManager.loadUser() != nil
+        
+        if isUserLoggedIn {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                self.flowDelegate?.openHomeScreen()
+            }
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                self.showLoginBottomSheet()
+            }
         }
         
     }
