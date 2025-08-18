@@ -11,11 +11,14 @@ import UIKit
 class NewMedicationViewController: UIViewController {
     
     let contentView: NewMedicationView
+    let viewModel: NewMedicationViewModel
     
     init(
-        contentView: NewMedicationView
+        contentView: NewMedicationView,
+        viewModel: NewMedicationViewModel
     ) {
         self.contentView = contentView
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -30,6 +33,7 @@ class NewMedicationViewController: UIViewController {
     
     private func setupView() {
         view.backgroundColor = .white
+        contentView.delegate = self
         view.addSubview(contentView)
         setupConstraints()
     }
@@ -43,6 +47,15 @@ class NewMedicationViewController: UIViewController {
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
+}
 
-    
+extension NewMedicationViewController: NewMedicationViewDelegate {
+    func handleSaveButtonTapped(remedy: String, time: String, recurrence: String, takeNow: Bool) {
+        viewModel.addNewMedication(
+            remedy: remedy,
+            time: time,
+            recurrence: recurrence,
+            takeNow: takeNow
+        )
+    }
 }

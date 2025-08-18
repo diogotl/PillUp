@@ -8,8 +8,9 @@
 import Foundation
 import UIKit
 
-class NewMedicationView: UIView{
+class NewMedicationView: UIView {
     
+    weak var delegate: NewMedicationViewDelegate?
     
     let pageLabel: UILabel = {
         let label = UILabel()
@@ -44,13 +45,21 @@ class NewMedicationView: UIView{
     )
     
     let takeNowCheckBox = CheckBox()
-        
+    
     let takeNowLabel: UILabel = {
         let label = UILabel()
         label.text = "Take Now"
         label.font = UIFont.systemFont(ofSize: 16)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+    
+    let timePicker: UIDatePicker = {
+        let picker = UIDatePicker()
+        picker.datePickerMode = .time
+        picker.preferredDatePickerStyle = .wheels
+        picker.translatesAutoresizingMaskIntoConstraints = false
+        return picker
     }()
     
     let submitButton: UIButton = {
@@ -61,16 +70,83 @@ class NewMedicationView: UIView{
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 8
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(submitButtonTapped), for:.touchUpInside)
         return button
     }()
+    
+    @objc
+    private func submitButtonTapped() {
+        delegate?.handleSaveButtonTapped(
+            remedy: remedy.input.text ?? "",
+            time: time.input.text ?? "",
+            recurrence: frequency.input.text ?? "",
+            takeNow: takeNowCheckBox.isChecked
+        )
+    }
     
     init() {
         super.init(frame: .zero)
         setupUI()
+        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupTimeInput() {
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(didSelectTime))
+        toolbar.setItems([doneButton], animated: true)
+        
+        time.input.inputView = timePicker
+        time.input.inputAccessoryView = toolbar
+    }
+    
+    @objc
+    private func didSelectTime() {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        time.input.text = formatter.string(from: timePicker.date)
+        time.input.resignFirstResponder()
+    }
+    
+    let recurrencePicker: UIPickerView = {
+        let picker = UIPickerView()
+        picker.translatesAutoresizingMaskIntoConstraints = false
+        return picker
+    }()
+    
+    let recurrenceOptions = [
+        "De hora em hora",
+        "A cada 2 horas",
+        "A cada 4 horas",
+        "A cada 8 horas",
+        "A cada 12 horas",
+        "A cada dia",
+    ];
+    
+    private func setupRecurrence() {
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(didSelectRecurrence))
+        toolbar.setItems([doneButton], animated: true)
+        
+        frequency.input.inputView = recurrencePicker
+        frequency.input.inputAccessoryView = toolbar
+        
+        recurrencePicker.delegate = self
+        recurrencePicker.dataSource = self
+    }
+    
+    @objc
+    private func didSelectRecurrence() {
+        let selectedRow = recurrencePicker.selectedRow(inComponent: 0)
+        frequency.input.text = recurrenceOptions[selectedRow]
+        frequency.input.resignFirstResponder()
     }
     
     private func setupUI() {
@@ -84,6 +160,8 @@ class NewMedicationView: UIView{
         addSubview(takeNowLabel)
         addSubview(submitButton)
         
+        setupTimeInput()
+        setupRecurrence()
         setupConstraints()
     }
     
@@ -121,7 +199,19 @@ class NewMedicationView: UIView{
             submitButton.heightAnchor.constraint(equalToConstant: 44),
             submitButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -20)
         ])
-        
+    }
+}
+
+extension NewMedicationView: UIPickerViewDelegate, UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
     }
     
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return recurrenceOptions.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return recurrenceOptions[row]
+    }
 }
