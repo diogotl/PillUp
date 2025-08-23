@@ -94,6 +94,29 @@ class NewMedicationView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private func validateInputs() {
+        
+        let isRemedyFilled = !(remedy.input.text ?? "").isEmpty
+        let isTimeFilled = !(time.input.text ?? "").isEmpty
+        let isFrequencyFilled = !(frequency.input.text ?? "").isEmpty
+        
+        print("Remedy filled: \(isRemedyFilled), Time filled: \(isTimeFilled), Frequency filled: \(isFrequencyFilled)")
+        
+        submitButton.isEnabled = isRemedyFilled && isTimeFilled && isFrequencyFilled
+        submitButton.backgroundColor = submitButton.isEnabled ? UIColor.systemRed : UIColor.lightGray
+    }
+    
+    private func setupObservers() {
+        remedy.input.addTarget(self, action: #selector(inputDidChange), for: .editingChanged)
+        time.input.addTarget(self, action: #selector(inputDidChange), for: .editingChanged)
+        frequency.input.addTarget(self, action: #selector(inputDidChange), for: .editingChanged)
+    }
+    
+    @objc
+    func inputDidChange() {
+        validateInputs()
+    }
+    
     private func setupTimeInput() {
         let toolbar = UIToolbar()
         toolbar.sizeToFit()
@@ -111,6 +134,8 @@ class NewMedicationView: UIView {
         formatter.timeStyle = .short
         time.input.text = formatter.string(from: timePicker.date)
         time.input.resignFirstResponder()
+        
+        validateInputs()
     }
     
     let recurrencePicker: UIPickerView = {
@@ -147,6 +172,8 @@ class NewMedicationView: UIView {
         let selectedRow = recurrencePicker.selectedRow(inComponent: 0)
         frequency.input.text = recurrenceOptions[selectedRow]
         frequency.input.resignFirstResponder()
+        
+        validateInputs()
     }
     
     private func setupUI() {
@@ -159,10 +186,12 @@ class NewMedicationView: UIView {
         addSubview(takeNowCheckBox)
         addSubview(takeNowLabel)
         addSubview(submitButton)
-        
+        setupObservers()
         setupTimeInput()
         setupRecurrence()
         setupConstraints()
+        validateInputs()
+       
     }
     
     private func setupConstraints() {
