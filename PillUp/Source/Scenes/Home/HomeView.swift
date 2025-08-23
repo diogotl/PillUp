@@ -66,9 +66,6 @@ class HomeView: UIView {
         item.heightAnchor.constraint(equalToConstant: 100).isActive = true
         item.isUserInteractionEnabled = true
         return item
-
- 
-        
     }()
     
     private func setupMenuItemTapGesture() {
@@ -76,12 +73,21 @@ class HomeView: UIView {
         menuItem.addGestureRecognizer(tapGesture)
     }
     
+    private func setupMenuItem2TapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(menuItem2Tapped))
+        menuItem1.addGestureRecognizer(tapGesture)
+    }
+    
     @objc
     private func menuItemTapped() {
+        delegate?.handleNavigateToMedicineListButtonTapped()
+    }
+    
+    @objc
+    private func menuItem2Tapped() {
         delegate?.handleNavigateToNewMedicineButtonTapped()
     }
 
-    
     let menuItem1: ButtonMenuItem = {
         let item = ButtonMenuItem()
         item.translatesAutoresizingMaskIntoConstraints = false
@@ -93,7 +99,6 @@ class HomeView: UIView {
         item.heightAnchor.constraint(equalToConstant: 100).isActive = true
         return item
     }()
-    
     
     let feedbackButton: UIButton = {
         let button = UIButton(type: .system)
@@ -125,6 +130,7 @@ class HomeView: UIView {
         
         setupConstraints()
         setupMenuItemTapGesture()
+        setupMenuItem2TapGesture()
         
     }
     
@@ -151,9 +157,6 @@ class HomeView: UIView {
             menuItem1.topAnchor.constraint(equalTo: menuItem.bottomAnchor, constant: Spacing.medium),
             menuItem1.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Spacing.medium),
             menuItem1.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Spacing.medium),
-            
-            
-            
             
             feedbackButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Spacing.medium),
             feedbackButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),

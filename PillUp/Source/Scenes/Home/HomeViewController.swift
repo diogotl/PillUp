@@ -76,6 +76,10 @@ class HomeViewController: UIViewController {
 }
 
 extension HomeViewController: HomeViewFlowDelegate {
+    func goToMedicationListScreen() {
+        flowDelegate?.goToMedicationListScreen()
+    }
+    
     func goToNewMedicationScreen() {
         flowDelegate?.goToNewMedicationScreen()
     }
@@ -87,6 +91,10 @@ extension HomeViewController: HomeViewFlowDelegate {
 }
 
 extension HomeViewController: HomeViewDelegate {
+    func handleNavigateToMedicineListButtonTapped() {
+        flowDelegate?.goToMedicationListScreen()
+    }
+    
     func handleNavigateToNewMedicineButtonTapped() {
         flowDelegate?.goToNewMedicationScreen()
     }

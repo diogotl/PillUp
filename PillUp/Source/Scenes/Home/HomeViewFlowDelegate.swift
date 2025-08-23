@@ -8,4 +8,5 @@
 protocol HomeViewFlowDelegate: AnyObject {
     func returnToSplashScreen()
     func goToNewMedicationScreen()
+    func goToMedicationListScreen()
 }

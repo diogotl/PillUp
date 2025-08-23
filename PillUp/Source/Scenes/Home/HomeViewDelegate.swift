@@ -8,5 +8,6 @@
 protocol HomeViewDelegate: AnyObject {
     func handleLogoutButtonTapped()
     func handleNavigateToNewMedicineButtonTapped()
+    func handleNavigateToMedicineListButtonTapped()
 }
 

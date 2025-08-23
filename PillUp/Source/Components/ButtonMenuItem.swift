@@ -69,7 +69,7 @@ class ButtonMenuItem: UIView {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(systemName: "chevron.right"), for: .normal)
-        button.tintColor = .systemGray // or any color you prefer
+        button.tintColor = .systemGray
         button.backgroundColor = .clear
         button.setTitle(nil, for: .normal)
         return button
