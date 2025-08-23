@@ -15,6 +15,7 @@ protocol FactoryProtocol: AnyObject {
         flowDelegate: HomeViewFlowDelegate?
     ) -> HomeViewController
     func makeNewMedicationViewController() -> NewMedicationViewController
+    func makeMedicationListViewController() -> MedicationListViewController
         
 }
 

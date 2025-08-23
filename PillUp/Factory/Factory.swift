@@ -8,6 +8,10 @@
 import UIKit
 
 class Factory: FactoryProtocol {
+    
+    let context = PersistenceController.shared.context
+   
+    
     func makeNewMedicationViewController() -> NewMedicationViewController {
         let contentView = NewMedicationView()
         let viewModel = NewMedicationViewModel()
@@ -54,6 +58,21 @@ class Factory: FactoryProtocol {
             flowDelegate: flowDelegate
         )
         return controller
+    }
+    
+    func makeMedicationListViewController() -> MedicationListViewController {
+        let contentView = MedicationListView()
+        let viewModel = MedicationListViewModel(
+            context: context
+        )
+        
+        
+        let controller = MedicationListViewController(
+            contentView: contentView,
+            viewModel: viewModel
+        )
+        return controller
+
     }
 }
 
