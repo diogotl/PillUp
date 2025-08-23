@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "badge.text" : {
+      "comment" : "Badge Text"
+    },
     "login.title" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -17,6 +20,12 @@
           }
         }
       }
+    },
+    "medicationList.description" : {
+      "comment" : "Medication List Description"
+    },
+    "medicationList.title" : {
+      "comment" : "Medication List Title"
     }
   },
   "version" : "1.1"
