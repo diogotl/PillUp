@@ -54,6 +54,11 @@ extension Coordinator: LoginBottomSheetFlowDelegate {
 }
 
 extension Coordinator: HomeViewFlowDelegate {
+    func goToMedicationListScreen() {
+        let medicationListViewController = factory.makeMedicationListViewController()
+        navigationController?.pushViewController(medicationListViewController, animated: true)
+    }
+    
     func goToNewMedicationScreen() {
         let newMedicationViewController = factory.makeNewMedicationViewController()
         navigationController?.pushViewController(newMedicationViewController, animated: true)
